@@ -62,9 +62,11 @@ install:
   # Install required libraries
   - vcpkg install catch2
   - vcpkg install docopt
+  - vcpkg install date
   - vcpkg install fmt
   - vcpkg install ms-gsl
   - vcpkg install eigen3
+  - vcpkg install pcg
   - vcpkg install tbb
   - vcpkg install cgal
   # Upgrade required libraries

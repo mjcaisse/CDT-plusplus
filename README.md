@@ -66,13 +66,11 @@ The goals and targets of this project are:
 
 If you just want to run a stable version of the code, grab a versioned [release].
 
-Otherwise, you can clone the repo, including submodules, as follows:
+Otherwise, you can clone the repo as follows:
 
 ~~~
-git clone --recurse-submodules https://github.com/acgetchell/CDT-plusplus.git
+git clone https://github.com/acgetchell/CDT-plusplus.git
 ~~~
-
-(Older versions of `git` may require `--recursive` instead of `--recurse-submodules`.)
 
 This will put you on the [development] branch. The project is organized similar to the [PitchFork Layout], as follows:
 
@@ -80,7 +78,7 @@ This will put you on the [development] branch. The project is organized similar 
 - build - Ephemeral out-of-source build directory
 - cmake - Cmake configurations
 - docs - Documentation
-- external - Includes submodules of external projects, e.g. [PCG]
+- external - Includes submodules of external projects (none so far, all using [vcpkg])
 - include - Header files
 - scripts - Build, test, and run scripts
 - src - Source files
@@ -115,15 +113,17 @@ sudo apt-get install yasm
 sudo apt-get install m4
 ```
 
-At minimum, you need to install prerequisites [Catch], [docopt], [{fmt}], [ms-gsl], [Eigen], [tbb], and [CGAL]
+At minimum, you need to install prerequisites [Catch], [docopt], [date], [{fmt}], [ms-gsl], [Eigen], [PCG], [tbb], and [CGAL]
 (which installs [boost], [mpir] and [mpfr]):
 
 ```bash
 vcpkg install catch2
 vcpkg install docopt
+vcpkg install date
 vcpkg install fmt
 vcpkg install ms-gsl
 vcpkg install eigen3
+vcpkg install pcg
 vcpkg install tbb
 vcpkg install cgal
 ```
@@ -337,11 +337,7 @@ Optional:
 
 ## Upstream issues
 
-- As of 2018-11-29, the [vcpkg] formula for [date] is [broken][1], so I removed reliance on that library.
-Hopefully it will be back in C++20! Until then, I use Boost.Date_Time on macOS/Linux and (unsafe) std::localtime
-on Windows, as Boost.Date_Time [doesn't link][2] correctly.
-
-- As of 2019-10-16 [vcpkg] doesn't [build][3] on macOS 10.14 (but does on 10.15).
+None.
 
 [CDT]: https://arxiv.org/abs/hep-th/0105267
 [CGAL]: https://www.cgal.org

@@ -23,7 +23,7 @@ include(cmake/StaticAnalyzers.cmake)
 
 # Link to project_options library to set sanitizer options
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_20)
+target_compile_features(project_options INTERFACE cxx_std_17)
 include(cmake/Sanitizers.cmake)
 enable_sanitizers(project_options)
 
@@ -50,6 +50,9 @@ find_package(Catch2 CONFIG REQUIRED)
 # https://github.com/docopt/docopt.cpp
 find_package(docopt CONFIG REQUIRED)
 
+# https://howardhinnant.github.io/date/date.html
+find_package(date CONFIG REQUIRED)
+
 # https://github.com/fmtlib/fmt
 find_package(fmt CONFIG REQUIRED)
 
@@ -58,6 +61,9 @@ find_package(Boost REQUIRED)
 
 # https://eigen.tuxfamily.org/index.php?title=Main_Page
 find_package(Eigen3 CONFIG REQUIRED)
+
+# https://www.pcg-random.org
+find_path(PCG_INCLUDE_DIRS "pcg_extras.hpp")
 
 # https://github.com/intel/tbb
 find_package(TBB CONFIG REQUIRED)
@@ -70,8 +76,7 @@ set(CGAL_DONT_OVERRIDE_CMAKE_FLAGS
     CACHE BOOL "Force CGAL to maintain CMAKE flags")
 set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
 
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include
-                    ${PROJECT_SOURCE_DIR}/external/pcg-cpp/include)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/include ${PCG_INCLUDE_DIRS})
 add_executable(initialize ${PROJECT_SOURCE_DIR}/src/initialize.cpp)
 
 # On macOS and Linux docopt builds an intermediate object, thus different
@@ -82,6 +87,8 @@ if(WIN32)
     PRIVATE project_options
             project_warnings
             docopt
+            date::date
+            date::date-tz
             fmt::fmt-header-only
             Eigen3::Eigen
             TBB::tbb
@@ -92,13 +99,15 @@ else()
     PRIVATE project_options
             project_warnings
             docopt_s
+            date::date
+            date::date-tz
             fmt::fmt
             fmt::fmt-header-only
             Eigen3::Eigen
             TBB::tbb
             CGAL::CGAL)
 endif()
-target_compile_features(initialize PRIVATE cxx_std_20)
+target_compile_features(initialize PRIVATE cxx_std_17)
 
 # add_executable(cdt-opt ${PROJECT_SOURCE_DIR}/src/cdt-opt.cpp)
 # target_link_libraries( cdt-opt PRIVATE date::tz date::date Catch2::Catch2
@@ -109,7 +118,7 @@ if(UNIX)
   add_executable(cdt-gv ${PROJECT_SOURCE_DIR}/src/cdt-gv.cpp)
   target_link_libraries(cdt-gv PRIVATE project_options project_warnings
                                        docopt_s CGAL::CGAL)
-  target_compile_features(cdt-gv PRIVATE cxx_std_20)
+  target_compile_features(cdt-gv PRIVATE cxx_std_17)
 endif()
 
 #

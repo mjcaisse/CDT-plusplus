@@ -24,12 +24,14 @@ target_link_libraries(
   project_options
   project_warnings
   Catch2::Catch2
+  date::date
+  date::date-tz
   fmt::fmt-header-only
   TBB::tbb
   CGAL::CGAL)
 
 # Activate C++17
-target_compile_features(CDT_test PRIVATE cxx_std_20)
+target_compile_features(CDT_test PRIVATE cxx_std_17)
 
 # Run unit tests
 add_test(NAME CDT-unit-tests COMMAND $<TARGET_FILE:CDT_test>)
