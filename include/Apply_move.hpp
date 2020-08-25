@@ -16,7 +16,9 @@
 #define CDT_PLUSPLUS_APPLY_MOVE_HPP
 
 #include "Function_ref.hpp"
+#include <fmt/ostream.h>
 #include <functional>
+#include <iostream>
 
 /// @tparam ManifoldType The type (topology, dimensionality) of manifold
 /// @tparam FunctionType The type of move applied to the manifold
@@ -29,15 +31,16 @@ template <typename ManifoldType,
           typename FunctionType = function_ref<ManifoldType(ManifoldType&)>>
 constexpr decltype(auto) apply_move(ManifoldType&& t_manifold,
                                     FunctionType&& t_move)
-// try
+try
 {
   return std::invoke(std::forward<FunctionType>(t_move),
                      std::forward<ManifoldType>(t_manifold));
 }
-// catch (std::exception const& except)
-//{
-//  std::cerr << "apply_move failed: " << except.what() << "\n";
-//  throw;
-//}
+catch (std::exception const& except)
+{
+  //  std::cerr << "apply_move failed: " << except.what() << "\n";
+  fmt::print(std::cerr, "apply_move failed: {}.\n", except.what());
+  throw;
+}
 
 #endif  // CDT_PLUSPLUS_APPLY_MOVE_HPP
